@@ -1,7 +1,11 @@
 package org.demon.ioc;
 
+import org.springframework.util.CollectionUtils;
+
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -88,7 +92,62 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
     /**
      * new方式创建
      */
-    private Object createInstanceByConstructor(BeanDefinition beanDefinition) throws IllegalAccessException, InstantiationException {
-        return beanDefinition.getBeanClass().newInstance();
+    private Object createInstanceByConstructor(BeanDefinition beanDefinition) throws Exception {
+        Object[] args = getConstructorArgumentValues(beanDefinition);
+        if (args == null) {
+            return beanDefinition.getBeanClass().newInstance();
+        } else {
+            return determineConstructor(beanDefinition, args).newInstance(args);
+        }
+    }
+
+    /**
+     * 获取bean定义中的构造参数
+     */
+    private Object[] getConstructorArgumentValues(BeanDefinition beanDefinition) throws Exception {
+        return getRealValues(beanDefinition.getConstructorArgumentValues());
+    }
+
+    /**
+     * 获取构造参数
+     */
+    private Object[] getRealValues(List<?> constructorArgumentValues) throws Exception {
+        if (CollectionUtils.isEmpty(constructorArgumentValues)) {
+            return null;
+        }
+        int size = constructorArgumentValues.size();
+        Object[] values = new Object[constructorArgumentValues.size()];
+        for (int i = 0; i < size; i++) {
+            if (constructorArgumentValues.get(i) instanceof BeanReference) {
+                values[i] = doGetBean(((BeanReference) constructorArgumentValues.get(i)).getBeanName());
+            } else {
+                values[i] = constructorArgumentValues.get(i);
+            }
+        }
+        return values;
+    }
+
+    /**
+     * 查询构造方法
+     */
+    private Constructor<?> determineConstructor(BeanDefinition beanDefinition, Object[] args) throws Exception {
+        Constructor<?> constructor = beanDefinition.getConstructor();
+        if (constructor != null) {
+            return constructor;
+        }
+        //如果无参，返回无参构造函数
+        if (args == null) {
+            return beanDefinition.getBeanClass().getConstructor(null);
+        }
+        Class<?>[] paramTypes = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            paramTypes[i] = args[i].getClass();
+        }
+        constructor = beanDefinition.getBeanClass().getConstructor(paramTypes);
+        //如果不是单例，则可以直接存Bean定义中
+        if (constructor != null && beanDefinition.getScope().equals(BeanDefinition.PROTOTYPE)) {
+            beanDefinition.setConstructor(constructor);
+        }
+        return constructor;
     }
 }

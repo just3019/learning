@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="24.5" y="153.0">org.demon.ioc.BeanDefinition</node>
+    <node x="105.75" y="79.0">org.demon.ioc.DefaultBeanFactory</node>
+    <node x="222.0" y="0.0">org.demon.ioc.BeanFactory</node>
+    <node x="0.0" y="232.0">org.demon.ioc.GeneralBeanDefinition</node>
+    <node x="0.0" y="0.0">org.demon.ioc.BeanDefinitionRegistry</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.demon.ioc.GeneralBeanDefinition" target="org.demon.ioc.BeanDefinition">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="org.demon.ioc.DefaultBeanFactory" target="org.demon.ioc.BeanDefinitionRegistry">
+      <point x="-43.5" y="-14.5" />
+      <point x="149.25" y="54.0" />
+      <point x="101.0" y="54.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="org.demon.ioc.DefaultBeanFactory" target="org.demon.ioc.BeanFactory">
+      <point x="43.5" y="-14.5" />
+      <point x="236.25" y="54.0" />
+      <point x="284.5" y="54.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="173.5" y="130.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

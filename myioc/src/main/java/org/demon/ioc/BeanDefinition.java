@@ -1,5 +1,8 @@
 package org.demon.ioc;
 
+import java.lang.reflect.Constructor;
+import java.util.List;
+
 /**
  * @author demon
  * @version 1.0.0
@@ -29,4 +32,20 @@ public interface BeanDefinition {
      * 获取工厂方法名
      */
     String getFactoryMethodName();
+
+    /**
+     * 获取构造函数的参数
+     */
+    List<?> getConstructorArgumentValues();
+
+    /**
+     * 获取构造函数
+     */
+    Constructor<?> getConstructor();
+
+    /**
+     * 缓存构造函数
+     */
+    void setConstructor(Constructor<?> constructor);
+
 }

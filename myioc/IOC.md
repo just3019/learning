@@ -267,3 +267,156 @@ public class IocTest {
 该图展示了简易ioc的类关系图。
 
 # DI --- 依赖注入
+通过上面篇幅讲的ioc过程中，我们只能进行无参构造函数创建对象。但真实工作中不是这么简单的。我们类的对象会有不同类型的构造参数和属性，这个时候使用上面的simple-ioc框架就创建不了对象了。  
+
+## 进一步细化bean定义
+我们需要做几件事：
+1.设置这个类的构造参数（我们先只考虑基础数据类型和Bean引用）
+2.获取这个类的构造参数
+3.获取这个类对应的构造函数
+
+### 第一步 
+首先，我们需要再bean定义接口提供设置构造参数的方法(BeanDefinition)
+```
+List<?> getConstructorArgumentValues();
+```
+通用的bean定义类需要添加构造参数的属性用来存储。(GeneralBeanDefinition)
+```
+private List<?> constructorArgumentValues;
+```
+我们使用List<?>来存储构造参数，当数据类型是Bean的时候，我们需要先将Bean参数获取。为了能识别哪些类是bean对象，我们提供一个BeanReference类，如果是bean引用的参数，继承BeanReference。
+```java
+@AllArgsConstructor
+public class BeanReference {
+    @Getter
+    private String beanName;
+}
+```
+## 第二步 有了Bean标识，我们可以再DefaultBeanFactory中添加获取构造参数的方法
+```
+/**
+ * 获取bean定义中的构造参数
+ */
+private Object[] getConConstructorArgumentValues(BeanDefinition beanDefinition) throws Exception {
+    return getRealValues(beanDefinition.getConstructorArgumentValues());
+}
+
+/**
+ * 获取构造参数
+ */
+private Object[] getRealValues(List<?> constructorArgumentValues) throws Exception {
+    if (CollectionUtils.isEmpty(constructorArgumentValues)) {
+        return null;
+    }
+    int size = constructorArgumentValues.size();
+    Object[] values = new Object[constructorArgumentValues.size()];
+    for (int i = 0; i < size; i++) {
+        if (constructorArgumentValues.get(i) instanceof BeanReference) {
+            values[i] = doGetBean(((BeanReference) constructorArgumentValues.get(i)).getBeanName());
+        } else {
+            values[i] = constructorArgumentValues.get(i);
+        }
+    }
+    return values;
+}
+```
+### 第三步
+参数有了我们需要找对应的构造参数，我们使用Class类中的方法寻找。
+我们再DefaultBeanFactory类中定义查询我们需要的构造方法
+```
+/**
+ * 查询构造方法
+ */
+private Constructor<?> determineConstructor(BeanDefinition beanDefinition, Object[] args) throws Exception {
+    Constructor<?> constructor = beanDefinition.getConstructor();
+    if (constructor != null) {
+        return constructor;
+    }
+    //如果无参，返回无参构造函数
+    if (args == null) {
+        return beanDefinition.getBeanClass().getConstructor(null);
+    }
+    Class<?>[] paramTypes = new Class[args.length];
+    for (int i = 0; i < args.length; i++) {
+        paramTypes[i] = args[i].getClass();
+    }
+    constructor = beanDefinition.getBeanClass().getConstructor(paramTypes);
+    //如果不是单例，则可以直接存Bean定义中
+    if (constructor != null && beanDefinition.getScope().equals(BeanDefinition.PROTOTYPE)) {
+        beanDefinition.setConstructor(constructor);
+    }
+    return constructor;
+}
+```
+## 有了构造参数和构造函数，我们就可以修改创建类的方法了
+DefaultBeanFactory
+```
+/**
+ * new方式创建,新增有参构造方法实现
+ */
+private Object createInstanceByConstructor(BeanDefinition beanDefinition) throws Exception {
+    Object[] args = getConstructorArgumentValues(beanDefinition);
+    if (args == null) {
+        return beanDefinition.getBeanClass().newInstance();
+    } else {
+        return determineConstructor(beanDefinition, args).newInstance(args);
+    }
+}
+```
+
+## 开始写测试用例。
+修改原先的TestBean类，再添加一个TestBean2类
+```java
+public class TestBean {
+
+    public TestBean(){}
+
+    public TestBean(TestBean2 testBean2) {
+    }
+
+    public void test() {
+        System.out.println("test方法  " + this);
+    }
+}
+
+public class TestBean2 {
+
+    public TestBean2(){}
+
+    public void test() {
+        System.out.println("testBean2方法  " + this);
+    }
+}
+```
+添加我们的测试方法
+```
+@Test
+public void testDi() throws Exception {
+    GeneralBeanDefinition generalBeanDefinition = new GeneralBeanDefinition();
+    generalBeanDefinition.setBeanClass(TestBean2.class);
+    defaultBeanFactory.registryBeanDefinition("testBean2", generalBeanDefinition);
+
+    generalBeanDefinition = new GeneralBeanDefinition();
+    generalBeanDefinition.setBeanClass(TestBean.class);
+    List<Object> args = new ArrayList<>();
+    args.add(new BeanReference("testBean2"));
+    generalBeanDefinition.setConstructorArgumentValues(args);
+    defaultBeanFactory.registryBeanDefinition("testBean", generalBeanDefinition);
+
+
+    TestBean testBean = (TestBean) defaultBeanFactory.getBean("testBean");
+    testBean.test();
+}
+```
+打印结果
+```
+test方法  org.demon.ioc.TestBean@36902638
+```
+至此简版的依赖注入也已经完成
+
+## 总结
+依赖注入我们重点关注构造参数和构造方法。
+我们还可以扩展通过工厂方法，静态方法等方式创建对象。
+
+
+ps: 示例工程地址： https://github.com/just3019/learning.git

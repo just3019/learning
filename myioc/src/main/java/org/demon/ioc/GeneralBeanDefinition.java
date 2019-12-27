@@ -3,6 +3,9 @@ package org.demon.ioc;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Constructor;
+import java.util.List;
+
 /**
  * @author demon
  * @version 1.0.0
@@ -14,6 +17,8 @@ public class GeneralBeanDefinition implements BeanDefinition {
     private String scope = SINGLETON;
     private String factoryBeanName;
     private String factoryMethodName;
+    private List<?> constructorArgumentValues;
+    private Constructor<?> constructor;
 
     public void SetScope(String scope) {
         if (!StringUtils.isEmpty(scope)) {
@@ -21,23 +26,4 @@ public class GeneralBeanDefinition implements BeanDefinition {
         }
     }
 
-    @Override
-    public String getScope() {
-        return this.scope;
-    }
-
-    @Override
-    public Class<?> getBeanClass() {
-        return this.beanClass;
-    }
-
-    @Override
-    public String getFactoryBeanName() {
-        return this.factoryBeanName;
-    }
-
-    @Override
-    public String getFactoryMethodName() {
-        return this.factoryMethodName;
-    }
 }
