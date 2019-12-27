@@ -418,5 +418,7 @@ test方法  org.demon.ioc.TestBean@36902638
 依赖注入我们重点关注构造参数和构造方法。
 我们还可以扩展通过工厂方法，静态方法等方式创建对象。
 
+提供一个spring ioc学习路线：
+IOC-->DI-->AOP-->TX
 
 ps: 示例工程地址： https://github.com/just3019/learning.git
