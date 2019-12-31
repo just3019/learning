@@ -21,7 +21,10 @@
     <modules>
         <module>myaop</module>
         <module>myioc</module>
+        <module>jvm</module>
         <module>design</module>
+        <module>juc</module>
+        <module>base</module>
     </modules>
 
     <dependencies>
