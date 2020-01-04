@@ -21,3 +21,23 @@ connect()函数只用于客户端；
 
 ## BIO网络编程
 阻塞和非阻塞是获取资源方式；同步和异步是程序如何处理资源的逻辑。
+
+
+## NIO
+三大组件：Buffer，Channel，Selector
+
+### Buffer
+position：写模式的时候代表写数据的位置；读模式时代表读的位置。
+capacity：容量大小。
+limit：写模式等于buffer的容量；读模式limit等于写入数据量。
+
+提供了直接内存（direct堆外）和非直接内存（heap堆）
+```
+ByteBuffer directByteBuffer = ByteBuffer.allocateDirect(10);
+```
+如果使用堆外内存，建议分配给大对象（网络传输、文件读写）；通过虚拟机参数MaxDirectMemorySize限制，防止耗尽整个机器内存。
+
+### Channel
+
+### Selector
+
