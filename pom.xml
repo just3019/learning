@@ -25,6 +25,7 @@
         <module>design</module>
         <module>juc</module>
         <module>base</module>
+        <module>net</module>
     </modules>
 
     <dependencies>

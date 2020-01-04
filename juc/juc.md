@@ -1,15 +1,18 @@
 # JUC
 
 ## volatile
-内存可见性。当多个线程对共享数据进行操作时，内存可见。
+内存可见性。当多个线程对共享数据进行操作时，内存可见(禁止缓存)，防止指令重排。
 注：  
 1.不具备互斥性。
 2.不能保证变量的原子性。
 
 ## Atomic
 1.使用volatile保证内存可见性。
-2.通过CAS（Compare-And-Swap）算法保证数据原子性。
-
+2.通过Unsafe类中的CAS（Compare-And-Swap）算法保证数据原子性。
+CAS问题：
+1大量的循环，会消耗大量CPU资源。
+2.只能针对单个变量的操作。
+3.ABA问题。
 
 ## Thread
 ### 线程状态流转图
@@ -151,7 +154,7 @@ public class ThreadDemo5 {
     }
 }
 ```
-park和unparkfan方式
+park和unpark方式
 park不会释放锁，也可能导致死锁，如果在同步代码块中执行，则会死锁
 ```java
 public class ThreadDemo6 {
@@ -202,6 +205,42 @@ ThreadLocal<T> var = new ThreadLocal<T>();
 ### 栈封闭
 局部变量就是各自线程特有的，其他线程无法访问。
 
-## 线程池
+## 线程池 
+| 类型 | 名称 | 描述 |
+|:--------:| :-------------:|:------------:|
+| 接口 | Executor | 最上层的接口，定义执行任务的execute |
+| 接口 | ExecutorService | 集成Executor接口，拓展了Callable、Future、关闭方法 |
+| 接口 | ScheduledExecutorService | 集成ExecutorService接口，增加定时任务相关方法 |
+| 实现类 | ThreadPoolExecutor | 基础的线程池实现 |
+| 实现类 | ScheduledThreadPoolExecutor | 继承ThreadPoolExecutor，实现ScheduledExecutorService接口中的定时任务方法 |
 
+### 线程池执行原理
+![](https://demonself.oss-cn-hangzhou.aliyuncs.com/threadpool1.png)
+
+## Lock
+
+### ReadWriteLock
+读写锁。当有读锁存在的时候，写锁不能获取锁。写锁是线程独占，读锁是共享。
+锁降级指写锁降级为读锁。
+示例：LockDemo2.java
+
+### AQS
+提供了对资源占用、释放，线程的等待、唤醒等接口和具体实现。
+包括：链表(Node)，标志位(owner)，状态(state)
+独享资源使用 tryAcquire、tryRelease方法实现。操作owner属性
+共享资源使用 tryAcquireShare、tryReleaseShare方法实现。操作链表。
+
+### CopyOnWriteArrayList
+每次写都加锁，并且创建一个新的数组，写完后再替换掉旧的数组。获取数据不加锁。
+
+### CyclicBarrier
+使用：每慢多少个事件后执行
+场景：当达到一定数量去操作。（批量处理）
+
+### Semaphore
+场景：限流
+
+### ForkJoin
+适合数据处理，结果汇总。
+配合RecursiveTask和RecursiveAction
 
