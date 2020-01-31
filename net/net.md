@@ -41,3 +41,14 @@ ByteBuffer directByteBuffer = ByteBuffer.allocateDirect(10);
 
 ### Selector
 
+
+## Netty
+
+###Reactor模型
+
+###Channel
+
+###ChannelPipeline责任链设计模式
+创建channel时自动创建一个pipeline。
+
+###内存管理 ByteBuf

@@ -1,4 +1,4 @@
-package org.demon;
+package org.demon.bio;
 
 import org.junit.jupiter.api.Test;
 

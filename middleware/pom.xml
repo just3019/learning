@@ -10,18 +10,12 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>net</artifactId>
+    <artifactId>middleware</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.44.Final</version>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>mq</module>
+    </modules>
 
     
 </project>
