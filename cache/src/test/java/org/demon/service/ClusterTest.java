@@ -27,8 +27,8 @@ public class ClusterTest {
         while (true) {
             i++;
             redisTemplate.opsForValue().set("test-value" + i, String.valueOf(i));
-            System.out.println("修改test-value值为: " + i);
-            Thread.sleep(1000L);
+            System.out.println("修改test-value" + i + "值为: " + i);
+            Thread.sleep(100L);
         }
     }
 
