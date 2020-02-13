@@ -40,6 +40,11 @@ ByteBuffer directByteBuffer = ByteBuffer.allocateDirect(10);
 ### Channel
 
 ### Selector
+四个时间分别对应SelectionKey四个常量。
+1. 读取：OP_READ = 1;
+2. 写入：OP_WRITE = 4;
+3. 连接：OP_CONNECT = 8;
+4. 准备就绪：OP_ACCEPT 
 
 
 ## Netty

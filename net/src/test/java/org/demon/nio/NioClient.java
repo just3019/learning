@@ -23,7 +23,7 @@ public class NioClient {
             socketChannel.write(byteBuffer);
         }
 
-        System.out.println("收到响应：");
+        System.out.println("收到响应");
         ByteBuffer response = ByteBuffer.allocate(1024);
         while (socketChannel.isOpen() && socketChannel.read(response) != -1) {
             if (response.position() > 0) break;

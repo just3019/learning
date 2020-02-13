@@ -26,7 +26,7 @@ public class NioServer2 {
         //2.构建选择器
         Selector selector = Selector.open();
         SelectionKey selectionKey = serverSocketChannel.register(selector, 0, serverSocketChannel);
-        selectionKey.interestOps(SelectionKey.OP_ACCEPT);
+        selectionKey.interestOps(SelectionKey.OP_ACCEPT); // 对serverSocketChannel上的accept事件感兴趣
 
         serverSocketChannel.socket().bind(new InetSocketAddress(8080));
         System.out.println("启动成功");
@@ -41,6 +41,7 @@ public class NioServer2 {
                 SelectionKey key = iter.next();
                 iter.remove();
 
+                //判断是否为新连接事件accept
                 if (key.isAcceptable()) {
                     ServerSocketChannel server = (ServerSocketChannel) key.attachment();
                     SocketChannel client = server.accept();
@@ -49,6 +50,7 @@ public class NioServer2 {
                     System.out.println("收到新连接：" + client.getRemoteAddress());
                 }
 
+                //判断是否为读取事件read
                 if (key.isReadable()) {
                     SocketChannel client = (SocketChannel) key.attachment();
                     ByteBuffer request = ByteBuffer.allocate(1024);

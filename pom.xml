@@ -30,6 +30,7 @@
         <module>middleware</module>
         <module>docker</module>
         <module>cache</module>
+        <module>db</module>
     </modules>
 
     <dependencies>

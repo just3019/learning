@@ -15,17 +15,16 @@ public class NioServer {
         serverSocketChannel.socket().bind(new InetSocketAddress(8080));//绑定端口
         System.out.println("启动成功");
         while (true) {
-            SocketChannel socketChannel = serverSocketChannel.accept();
+            SocketChannel socketChannel = serverSocketChannel.accept(); //非阻塞，获取tcp通道
             if (socketChannel == null) continue;
 
             System.out.println("建立新的连接：" + socketChannel.getRemoteAddress());
             socketChannel.configureBlocking(false);//设置非阻塞
             ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
             while (socketChannel.isOpen() && socketChannel.read(byteBuffer) != -1) {
-                //判断数据读取有没有结束
+                //判断数据读取有没有结束，如果position超过0标识已经有请求过来
                 if (byteBuffer.position() > 0) break;
             }
-            if (byteBuffer.position() == 0) continue;
             byteBuffer.flip();
             byte[] content = new byte[byteBuffer.limit()];
             byteBuffer.get(content);
@@ -35,7 +34,7 @@ public class NioServer {
             String response = "HTTP/1.1 200 OK\r\n"+"Content-Length: 11\r\n\r\n"+"Hello world";
             ByteBuffer buffer = ByteBuffer.wrap(response.getBytes());
             while (buffer.hasRemaining()) {
-                socketChannel.write(buffer);
+                socketChannel.write(buffer);//非阻塞
             }
 
         }

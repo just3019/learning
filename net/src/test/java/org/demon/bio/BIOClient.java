@@ -1,7 +1,5 @@
 package org.demon.bio;
 
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -13,18 +11,6 @@ import java.util.Scanner;
  * @version 1.0.0
  */
 public class BIOClient {
-
-    @Test
-    public void test() throws IOException {
-        Socket socket = new Socket("localhost", 8080);
-        OutputStream outputStream = socket.getOutputStream();
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入：");
-        String msg = scanner.nextLine();
-        outputStream.write(msg.getBytes(StandardCharsets.UTF_8));
-//        scanner.close();
-//        socket.close();
-    }
 
 
     public static void main(String[] args) throws IOException {
