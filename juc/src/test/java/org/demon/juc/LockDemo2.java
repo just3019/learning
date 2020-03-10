@@ -23,7 +23,7 @@ public class LockDemo2 {
 
 
     public Object get(String id) {
-        Object value = null;
+        Object value;
         rwl.readLock().lock();
         try {
             if ((value = map.get(id)) == null) {
@@ -31,7 +31,7 @@ public class LockDemo2 {
                 rwl.writeLock().lock();
                 try {
                     value = id;
-                    rwl.readLock().lock();
+                    rwl.readLock().lock();//锁降级
                 } finally {
                     rwl.writeLock().unlock();
                 }

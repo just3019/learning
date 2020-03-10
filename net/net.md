@@ -49,6 +49,10 @@ ByteBuffer directByteBuffer = ByteBuffer.allocateDirect(10);
 
 ## Netty
 
+###启动流程
+1.初始化两个EventLoopGroup对象（parentGroup和childGroup,parent作为acceptor使用，child作为事件轮询器）
+2.初始化ServerBootstrap。
+
 ###Reactor模型
 
 ###Channel

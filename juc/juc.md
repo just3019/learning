@@ -13,6 +13,7 @@ CAS问题：
 1大量的循环，会消耗大量CPU资源。
 2.只能针对单个变量的操作。
 3.ABA问题。
+###java1.8增加LongAdder类，使用了分组的概念，提升了性能。
 
 ## Thread
 ### 线程状态流转图
@@ -219,6 +220,9 @@ ThreadLocal<T> var = new ThreadLocal<T>();
 
 ## Lock
 
+### ReentrantLock
+可重入锁。同一个线程可以多次lock()。如果其他线程想要使用的话，必须锁几次，释放几次。
+
 ### ReadWriteLock
 读写锁。当有读锁存在的时候，写锁不能获取锁。写锁是线程独占，读锁是共享。
 锁降级指写锁降级为读锁。
@@ -229,6 +233,10 @@ ThreadLocal<T> var = new ThreadLocal<T>();
 包括：链表(Node)，标志位(owner)，状态(state)
 独享资源使用 tryAcquire、tryRelease方法实现。操作owner属性
 共享资源使用 tryAcquireShare、tryReleaseShare方法实现。操作链表。
+// acquire、 acquireShared ： 定义了资源争用的逻辑，如果没拿到，则等待。
+// tryAcquire、 tryAcquireShared ： 实际执行占用资源的操作，如何判定一个由使用者具体去实现。
+// release、 releaseShared ： 定义释放资源的逻辑，释放之后，通知后续节点进行争抢。
+// tryRelease、 tryReleaseShared： 实际执行资源释放的操作，具体的AQS使用者去实现。
 
 ### CopyOnWriteArrayList
 每次写都加锁，并且创建一个新的数组，写完后再替换掉旧的数组。获取数据不加锁。

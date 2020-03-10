@@ -26,6 +26,10 @@ GC:
 ## jit
 just-in-time compile 即时编译器
 优化代码执行顺序。会导致指令重排。
+### 指令解释
+-Server：server模式启动，速度较慢，但启动之后的性能更高。
+-Client: client模式启动，速度较快，但性能不如server模式。
+-Djava.compiler=NONE：关闭jit优化。
 
 
 ## 类加载机制
@@ -34,9 +38,10 @@ just-in-time compile 即时编译器
 ![](https://demonself.oss-cn-hangzhou.aliyuncs.com/class1.png)
 
 ### 类加载器
-Bootstrap loader 核心类库加载器  
-Extension Class loader 拓展类库加载器  
-application Class loader 应用程序加载器
+Bootstrap loader 核心类库加载器:加载JRE_HOME/jre/lib目录，或者用户配置的目录  
+Extension Class loader 拓展类库加载器:加载JRE_HOME/jre/lib/ext（jdk扩展包）目录  
+application Class loader 应用程序加载器:加载java.class.path指定的目录
+
 #### 系统热加载
 通过创建新的类加载器去加载新编译的类。
 
