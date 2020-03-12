@@ -65,7 +65,7 @@ application Class loader 应用程序加载器:加载java.class.path指定的目
 强引用：必不可少的引用。例如 StringBuilder sb = new StringBuilder("test"); 变量sb指向StringBuilder堆空间，通过sb可以操作该对象。  
 软引用：通过SoftReference实现。(一般使用在缓存。)根据JVM当前堆情况判断何时回收。SoftReference<Object> sf = new SoftReference<>(obj);  
 弱引用：通过WeakReference实现。一定会被回收，只能存活到下一次垃圾回收发生之前。  
-虚引用：通过PhantomReference实现。
+虚引用：通过PhantomReference实现。不能通过他访问对象
 
 ###垃圾回收算法
 标记-清除法：分为标记和清除两个阶段。首先标记出需要回收的对象，在标记完成后统一回收所有被标记的对象。  
@@ -78,6 +78,12 @@ jvm可以设置存活多少次进入老年代和大对象多大进入老年代
 串行收集器（Serial）：单个线程来执行所有收集工作，适合单处理器机器。在执行gc的时候，会停止所有其他jvm上的工作。  
 并行收集器（parallel）：新生代和老年代可以并行进行。
 并发收集器（CMS concurrent Mark Sweep）：尝试和用户线程一起执行。
+
+### full gc
+老年代的连续空间大于新生代所有对象的总大小，则进行minor GC。 否则进行full GC。
+> System.gc()方法可能会触发full gc
+> 老年代空间不足的时候
+
 
 ### jvm调优
 组件：
