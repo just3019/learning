@@ -56,8 +56,7 @@ application Class loader 应用程序加载器:加载java.class.path指定的目
 方式：引用计数；可达性分析；
 
 #### 可达性分析
-可以作为GC ROOT的对象：  
-虚拟机栈中正在引用的对象；本地方法栈中正在引用的对象；静态属性引用的对象；方法区常量引用的对象  
+可以作为GC ROOT的对象：虚拟机栈中正在引用的对象；本地方法栈中正在引用的对象；静态属性引用的对象；方法区常量引用的对象    
 看下图，jvm会维护一个GCRoot集合，然后遍历集合，找到GCRoot可以到达的对象。这样就标记上了。
 ![](https://demonself.oss-cn-hangzhou.aliyuncs.com/class3.png)
 
@@ -103,6 +102,14 @@ GC调优思路：
 5.调整参数
 
 #### JVM参数设置
+标准参数：-help； -version之类的
+X参数：
+XX参数：Boolean参数和KV参数
+
+查询jvm初始化值：java -XX:+PrintFlagsInitial
+查询本机的jvm初始化值：java -XX:+PrintFlagsFinal
+查看默认执行本机jvm的初始值：java -XX:+PrintCommandLineFlags
+
 -verbose:gc -Xloggc:gc.log -XX:+PrintGCDetails  
 打印JVM GC日志
 -XX:+HeapDumpOnOutOfMemoryError  -XX:HeapDumpPath=?
