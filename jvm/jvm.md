@@ -110,6 +110,11 @@ XX参数：Boolean参数和KV参数
 查询本机的jvm初始化值：java -XX:+PrintFlagsFinal
 查看默认执行本机jvm的初始值：java -XX:+PrintCommandLineFlags
 
+-XX:+PrintGCDetails 查看GC日志
+-XX:SurvivorRatio 设置eden:from:to 默认为8：1：1
+-XX:NewRatio 设置新生代占多少比例 默认为1/3
+-XX:MaxTenuringThreshold 设置用于自适应GC分级的最大拉伸阈值。默认15  
+
 -verbose:gc -Xloggc:gc.log -XX:+PrintGCDetails  
 打印JVM GC日志
 -XX:+HeapDumpOnOutOfMemoryError  -XX:HeapDumpPath=?
