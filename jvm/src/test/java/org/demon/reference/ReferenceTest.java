@@ -6,6 +6,8 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.WeakHashMap;
 
 /**
@@ -77,14 +79,10 @@ public class ReferenceTest {
 
     @Test
     public void oom() {
+        List<byte[]> list = new ArrayList<>();
         while (true) {
-            new Thread(()->{
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            list.add(new byte[1024 * 1024]);
         }
     }
+
 }
