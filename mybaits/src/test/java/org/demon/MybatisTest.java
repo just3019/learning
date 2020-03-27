@@ -31,7 +31,7 @@ public class MybatisTest {
             //2
             BlogMapper blogMapper = session.getMapper(BlogMapper.class);
             Blog blog = blogMapper.selectBlog(1);
-            if (blog != null){
+            if (blog != null) {
                 log.info(blog.toString());
             }
         }
