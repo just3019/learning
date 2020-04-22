@@ -33,6 +33,7 @@
         <module>db</module>
         <module>spring</module>
         <module>mybaits</module>
+        <module>security</module>
     </modules>
 
     <dependencies>
